@@ -1,0 +1,10 @@
+flask
+nltk
+sentence-transformers
+transformers
+torch
+scikit-learn
+python-docx
+reportlab
+wikipedia
+python-dotenv
