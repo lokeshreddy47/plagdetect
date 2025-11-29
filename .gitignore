@@ -1,0 +1,20 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Databases / logs
+*.db
+*.sqlite3
+*.log
+
+# Documents
+*.pdf
+*.docx
+*.txt
+
+# Environment / secrets
+.env
+instance/

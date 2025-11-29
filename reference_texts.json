@@ -1,0 +1,34 @@
+[
+  {
+    "topic": "Machine_learning",
+    "text": "Machine learning is a branch of artificial intelligence focused on building systems that learn from data to improve their performance without explicit programming."
+  },
+  {
+    "topic": "Natural_language_processing",
+    "text": "Natural language processing (NLP) is the processing of natural language information by a computer. The study of NLP, a subfield of computer science, is generally associated with artificial intelligence. NLP is related to information retrieval, knowledge representation, computational linguistics, and more broadly with linguistics.\nMajor processing tasks in an NLP system include: speech recognition, text classification, natural language understanding, and natural language generation.\n\n\n== History ==\n\nNatural language processing has its roots in the 1950s."
+  },
+  {
+    "topic": "Deep_learning",
+    "text": "In machine learning, deep learning focuses on utilizing multilayered neural networks to perform tasks such as classification, regression, and representation learning. The field takes inspiration from biological neuroscience and revolves around stacking artificial neurons into layers and \"training\" them to process data. The adjective \"deep\" refers to the use of multiple layers (ranging from three to several hundred or thousands) in the network. Methods used can be supervised, semi-supervised or unsupervised.\nSome common deep learning network architectures include fully connected networks, deep belief networks, recurrent neural networks, convolutional neural networks, generative adversarial networks, transformers, and neural radiance fields."
+  },
+  {
+    "topic": "Artificial_neural_network",
+    "text": "In machine learning, a neural network or neural net (NN), also called artificial neural network (ANN), is a computational model inspired by the structure and functions of biological neural networks.\nA neural network consists of connected units or nodes called artificial neurons, which loosely model the neurons in the brain. Artificial neuron models that mimic biological neurons more closely have also been recently investigated and shown to significantly improve performance. These are connected by edges, which model the synapses in the brain. Each artificial neuron receives signals from connected neurons, then processes them and sends a signal to other connected neurons."
+  },
+  {
+    "topic": "Technology",
+    "text": "Technology is the application of conceptual knowledge to achieve practical goals, especially in a reproducible way. The word technology can also mean the products resulting from such efforts, including both tangible tools such as utensils or machines, and intangible ones such as software. Technology plays a critical role in science, engineering, and everyday life.\nTechnological advancements have led to significant changes in society. The earliest known technology is the stone tool, used during prehistory, followed by the control of fire—which in turn contributed to the growth of the human brain and the development of language during the Ice Age, according to the cooking hypothesis."
+  },
+  {
+    "topic": "Innovation",
+    "text": "Innovation is the practical implementation of ideas that result in the introduction of new goods or services or improvement in offering goods or services. ISO TC 279 in the standard ISO 56000:2020 defines innovation as \"a new or changed entity, realizing or redistributing value\". Others have different definitions; a common element in the definitions is a focus on newness, improvement, and spread of ideas or technologies.\nInnovation often takes place through the development of more-effective products, processes, services, technologies, art works\nor business models that innovators make available to markets, governments and society.\nInnovation is related to, but not the same as, invention: innovation is more apt to involve the practical implementation of an invention (i.e."
+  },
+  {
+    "topic": "Plagiarism",
+    "text": "Plagiarism is the representation of another person's language, thoughts, ideas, or expressions as one's own original work. Although precise definitions vary depending on the institution, in many countries and cultures plagiarism is considered a violation of academic integrity and journalistic ethics, as well as of social norms around learning, teaching, research, fairness, respect, and responsibility. As such, a person or entity that is determined to have committed plagiarism is often subject to various punishments or sanctions, such as suspension, expulsion from school or work, fines, imprisonment, and other penalties.\nNot all cultures and countries hold the same beliefs about personal ownership of language or ideas, and plagiarism is typically not in itself a crime. However, like counterfeiting, fraud can be punished in a court for prejudices caused by copyright infringement, violation of moral rights, or torts."
+  },
+  {
+    "topic": "Academic_integrity",
+    "text": "Academic integrity is a moral code or ethical policy of academia. Academic integrity supports the enactment of educational values through behaviours such as the  avoidance of cheating, plagiarism, and contract cheating, as well as the maintenance of academic standards; honesty and rigor in research and academic publishing.\nThe term was popularized by Rutgers University professor Donald McCabe who is considered to be the \"grandfather of academic integrity\".  Other academic integrity scholars and advocates include Tracey Bretag (Australia), Cath Ellis (Australia), Sarah Elaine Eaton (Canada), Thomas Lancaster (UK), Tomáš Foltýnek (Czech Republic), and Tricia Bertram Gallant (US).\n\n\n== History ==\nDuring the late 18th century in the United States academic integrity was tightly correlated to the academic honor code."
+  }
+]

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Plagiarism & AI Detector</title>
+    <style>
+        /* -------- Theme variables -------- */
+        :root{
+            --bg-900:#071021;
+            --bg-800:#0b1220;
+            --panel:#0f1724;
+            --muted:#9fb0c8;
+            --muted-2:#7f94a9;
+            --accent:#6d28d9; /* purple */
+            --accent-2:#7c3aed;
+            --success:#10b981;
+            --danger:#ef4444;
+            --glass: rgba(255,255,255,0.03);
+            --glass-2: rgba(255,255,255,0.02);
+            --card-shadow: 0 8px 30px rgba(2,6,23,0.6);
+            --glass-border: rgba(255,255,255,0.04);
+            --radius:14px;
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+            --ui-font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        /* -------- Reset & layout -------- */
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family:var(--ui-font);
+            background:
+                radial-gradient(1200px 400px at 10% 10%, rgba(124,58,237,0.06), transparent 8%),
+                radial-gradient(1000px 300px at 90% 90%, rgba(0,0,0,0.05), transparent 10%),
+                linear-gradient(180deg,var(--bg-900), #031018 90%);
+            color:#e6eef8;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            padding:40px 24px;
+        }
+
+        .wrap{max-width:1200px;margin:0 auto}
+        .card{
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+            border-radius:var(--radius);
+            padding:22px;
+            box-shadow:var(--card-shadow);
+            border:1px solid var(--glass-border);
+            overflow:hidden;
+        }
+
+        header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+        header h1{font-size:20px;margin:0}
+        header p{margin:0;color:var(--muted);font-size:13px}
+
+        .grid{display:grid;grid-template-columns:1fr;gap:20px}
+        @media(min-width:992px){ .grid{grid-template-columns:2fr 1fr} }
+
+        /* -------- Form / controls -------- */
+        form.panel{background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(0,0,0,0.02));padding:18px;border-radius:12px;border:1px solid var(--glass-border)}
+        label.small{font-size:13px;color:var(--muted);display:block;margin-bottom:10px}
+
+        textarea#textInput{
+            width:100%;
+            min-height:170px;
+            resize:vertical;
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));
+            border:1px solid rgba(255,255,255,0.02);
+            padding:14px;
+            border-radius:10px;
+            color:inherit;
+            font-size:14px;
+            line-height:1.5;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+        }
+        textarea::placeholder{color:var(--muted-2)}
+
+        .file-row{display:flex;align-items:center;gap:12px;margin-top:8px}
+        .file-btn{
+            display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px dashed rgba(255,255,255,0.03);
+            background:transparent;color:var(--muted);cursor:pointer;font-size:13px;
+        }
+        .filename{color:var(--muted-2);font-size:13px}
+        input[type=file]{display:none}
+
+        .controls{display:flex;gap:10px;align-items:center;margin-top:14px}
+        .btn{
+            display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600;
+            background:linear-gradient(180deg,var(--accent),var(--accent-2));box-shadow:0 6px 18px rgba(124,58,237,0.15);color:white;
+        }
+        .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+        .btn.secondary{background:linear-gradient(180deg,#2b3440,#101820);color:var(--muted)}
+        .btn:active{transform:translateY(1px)}
+        .btn[disabled]{opacity:0.6;cursor:not-allowed}
+
+        .tip{font-size:12px;color:var(--muted);margin-top:10px}
+
+        /* -------- Results panel -------- */
+        aside.panel{background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(0,0,0,0.02));padding:18px;border-radius:12px;border:1px solid var(--glass-border)}
+        .section-title{font-size:13px;margin:0 0 10px 0;color:#dbeafe}
+        .small{font-size:13px;color:var(--muted)}
+        .result-row{margin-bottom:12px}
+
+        .match-list{max-height:360px;overflow:auto;padding-right:6px}
+        .match{
+            background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));
+            border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.02)
+        }
+        .match .sim{
+            font-weight:700;font-family:var(--mono);color:#f8fafc;margin-top:6px;
+            display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg, rgba(124,58,237,0.18), rgba(124,58,237,0.08));
+        }
+        .ref-snippet{color:#dbeafe;margin-top:8px;font-size:13px;white-space:pre-wrap;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+
+        /* similarity bar */
+        .bar-wrap{height:8px;background:rgba(255,255,255,0.02);border-radius:999px;margin-top:10px;overflow:hidden}
+        .bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#4f46e5);transition:width .6s ease}
+
+        /* checked text preview */
+        .preview{
+            margin-top:10px;background:rgba(255,255,255,0.015);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);
+            max-height:160px;overflow:auto;font-family:var(--mono);font-size:13px;color:#dbeafe;white-space:pre-wrap;
+        }
+
+        .meta-row{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:12px}
+        .status{font-weight:700;padding:6px 10px;border-radius:999px;font-size:13px}
+        .status.ok{background:rgba(16,185,129,0.12);color:var(--success)}
+        .status.warn{background:rgba(239,68,68,0.08);color:var(--danger)}
+
+        footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+
+        /* scrollbars (subtle) */
+        .match-list::-webkit-scrollbar,.preview::-webkit-scrollbar{height:8px;width:8px}
+        .match-list::-webkit-scrollbar-thumb,.preview::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.03);border-radius:999px}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="card">
+            <header>
+                <div>
+                    <h1>Plagiarism & AI Detector</h1>
+                    <p class="small">Paste text or upload a <span style="font-family:var(--mono)">.txt</span> / <span style="font-family:var(--mono)">.docx</span>. Click "Check" to analyze.</p>
+                </div>
+            </header>
+
+            <div class="grid">
+                <!-- left: form -->
+                <form method="POST" enctype="multipart/form-data" class="panel" id="analyzeForm">
+                    <label class="small">Paste text</label>
+                    <textarea id="textInput" name="text" placeholder="Paste text here (or upload a file)">{{ request.form.text or '' }}</textarea>
+
+                    <div style="margin-top:12px">
+                        <label class="small">Or upload a file</label>
+                        <div class="file-row">
+                            <label class="file-btn" for="fileInput">Choose file</label>
+                            <input id="fileInput" type="file" name="file" accept=".txt,.docx" />
+                            <div class="filename" id="fileName">No file selected</div>
+                        </div>
+                        <div class="tip">Tip: keep uploads under 4 MB.</div>
+                    </div>
+
+                    {% if error %}
+                        <div style="margin-top:12px;color:var(--danger);font-weight:700">{{ error }}</div>
+                    {% endif %}
+
+                    <div class="controls" style="margin-top:14px">
+                        <button class="btn" id="checkBtn" type="submit">Check</button>
+                        <button type="button" class="btn ghost" onclick="clearForm()">Clear</button>
+                        <a href="{{ url_for('download_report') }}" class="btn secondary" style="margin-left:auto">Download Report</a>
+                    </div>
+
+                    
+                </form>
+
+                <!-- right: results -->
+                <aside class="panel">
+                    <h3 class="section-title">Results</h3>
+
+                    {% if not result %}
+                        <div class="small">No analysis performed yet.</div>
+                    {% else %}
+                        <div class="result-row">
+                            <div class="small">AI Verdict</div>
+                            <div style="margin-top:6px;font-weight:700">{{ result.ai_verdict }}</div>
+                        </div>
+
+                        <div class="result-row">
+                            <div class="small">Stylometry</div>
+                            <div style="margin-top:6px">{{ result.style_verdict }}</div>
+                        </div>
+
+                        <div class="result-row">
+                            <div class="small">Plagiarism Matches</div>
+                            <div class="match-list" style="margin-top:10px">
+                                {% if result.plagiarism.matches and result.plagiarism.matches|length > 0 %}
+                                    {% for m in result.plagiarism.matches %}
+                                        <div class="match">
+                                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                                <div class="small" style="color:var(--muted-2)">Match</div>
+                                                <div class="sim">{{ m.similarity }}%</div>
+                                            </div>
+                                            <div class="ref-snippet">{{ m.reference }}</div>
+                                            <div class="bar-wrap"><div class="bar" style="width:{{ m.similarity }}%"></div></div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="small">No matches found above threshold.</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="result-row">
+                            <div class="small">Checked Text (preview)</div>
+                            <div class="preview">{{ result.input_text[:2500] }}</div>
+                        </div>
+
+                        <!-- JSON blob for frontends (safe) -->
+                        <script id="__detector_result_json" type="application/json">
+                            {{ result|tojson }}
+                        </script>
+                    {% endif %}
+                </aside>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Enhance file input label
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        fileInput && fileInput.addEventListener('change', (e)=>{
+            const f = e.target.files && e.target.files[0];
+            fileName.textContent = f ? f.name : 'No file selected';
+        });
+
+        function clearForm(){
+            document.getElementById('textInput').value = '';
+            if(fileInput){ fileInput.value = ''; fileName.textContent = 'No file selected'; }
+        }
+    </script>
+</body>
+</html>
